@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+<h1>{% if is_librarian %}All Orders{% else %}My Orders{% endif %}</h1>
+
+{% if not is_librarian %}
+<a href="{% url 'order_create' %}">+ Create Order</a>
+{% endif %}
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>ID</th>
+            {% if is_librarian %}<th>User</th>{% endif %}
+            <th>Book</th>
+            <th>Created</th>
+            <th>Return by</th>
+            <th>Returned</th>
+            {% if is_librarian %}<th>Action</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            {% if is_librarian %}
+            <td><a href="{% url 'user_detail' order.user.id %}">{{ order.user.email }}</a></td>
+            {% endif %}
+            <td>{{ order.book.name }}</td>
+            <td>{{ order.created_at|date:"d.m.Y" }}</td>
+            <td>{{ order.plated_end_at|date:"d.m.Y" }}</td>
+            <td>{% if order.end_at %}{{ order.end_at|date:"d.m.Y" }}{% else %}Not returned{% endif %}</td>
+            {% if is_librarian %}
+            <td>
+                {% if not order.end_at %}
+                <form method="post" action="{% url 'order_close' order.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Close</button>
+                </form>
+                {% else %}Closed{% endif %}
+            </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">No orders found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

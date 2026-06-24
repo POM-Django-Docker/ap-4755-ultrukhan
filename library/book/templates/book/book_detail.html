@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h3>{{ book.name }}</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>Опис:</strong> {{ book.description }}</p>
+        <p><strong>Залишилось:</strong> <span class="badge bg-primary">{{ book.count }} шт.</span></p>
+        <h5>Автори:</h5>
+        <ul>
+            {% for author in book.authors.all %}
+                <li>{{ author.name }} {{ author.surname }}</li>
+            {% empty %}
+                <li>Не вказано</li>
+            {% endfor %}
+        </ul>
+        
+        {% if request.user.is_authenticated %}
+            <button class="btn btn-warning mt-2">Замовити книгу</button>
+        {% endif %}
+        
+        <a href="{% url 'book_list' %}" class="btn btn-secondary mt-2 ms-2">Назад до списку</a>
+    </div>
+</div>
+{% endblock %}

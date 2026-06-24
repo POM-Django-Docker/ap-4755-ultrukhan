@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Каталог книг</h2>
+
+<form action="{% url 'book_list' %}" method="GET" class="row g-3 mb-4 p-3 bg-light rounded">
+    <div class="col-auto">
+        <input type="text" name="title" class="form-control" placeholder="Назва книги..." value="{{ request.GET.title }}">
+    </div>
+    <div class="col-auto">
+        <input type="text" name="author" class="form-control" placeholder="Ім'я автора..." value="{{ request.GET.author }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Шукати</button>
+        <a href="{% url 'book_list' %}" class="btn btn-secondary">Скинути</a>
+    </div>
+</form>
+
+<div class="row">
+    {% for book in books %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ book.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    Автори: 
+                    {% for author in book.authors.all %}
+                        {{ author.name }} {{ author.surname }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        Невідомо
+                    {% endfor %}
+                </h6>
+                <p class="card-text">В наявності: <strong>{{ book.count }}</strong> шт.</p>
+                <a href="{% url 'book_detail' book.id %}" class="btn btn-outline-success btn-sm">Детальніше</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">Книг не знайдено.</p>
+    {% endfor %}
+</div>
+{% endblock %}

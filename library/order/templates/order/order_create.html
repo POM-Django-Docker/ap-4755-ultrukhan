@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Order</title>
+</head>
+<body>
+<h1>Create Order</h1>
+
+{% if form.errors %}
+    <div style="color:red">
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<form method="post" action="{% url 'order_create' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Order</button>
+    <a href="{% url 'my_orders' %}">Cancel</a>
+</form>
+</body>
+</html>

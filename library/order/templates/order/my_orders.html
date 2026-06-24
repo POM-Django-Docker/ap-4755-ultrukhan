@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders</title>
+</head>
+<body>
+<h1>My Orders</h1>
+<a href="{% url 'order_create' %}">+ Create Order</a>
+
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>ID</th><th>Book</th><th>Created</th><th>Return by</th><th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.book.name }}</td>
+            <td>{{ order.created_at|date:"d.m.Y" }}</td>
+            <td>{{ order.plated_end_at|date:"d.m.Y" }}</td>
+            <td>{% if order.end_at %}Returned{% else %}Active{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No orders found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

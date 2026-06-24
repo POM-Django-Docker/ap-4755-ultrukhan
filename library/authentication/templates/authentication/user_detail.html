@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Detail</title>
+</head>
+<body>
+<h1>User: {{ viewed_user.first_name }} {{ viewed_user.last_name }}</h1>
+<p><strong>Email:</strong> {{ viewed_user.email }}</p>
+<p><strong>Role:</strong> {{ viewed_user.get_role_name }}</p>
+<p><strong>Created:</strong> {{ viewed_user.created_at|date:"d.m.Y" }}</p>
+
+<h2>Orders</h2>
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>ID</th><th>Book</th><th>Created</th><th>Return by</th><th>Returned</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.book.name }}</td>
+            <td>{{ order.created_at|date:"d.m.Y" }}</td>
+            <td>{{ order.plated_end_at|date:"d.m.Y" }}</td>
+            <td>{% if order.end_at %}{{ order.end_at|date:"d.m.Y" }}{% else %}—{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No orders</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+<a href="{% url 'user_list' %}">← Back to Users</a>
+</body>
+</html>

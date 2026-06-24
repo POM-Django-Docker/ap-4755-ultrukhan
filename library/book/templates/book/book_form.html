@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">{% if form.instance.pk %}Редагування книги{% else %}Додавання нової книги{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    
+                    {{ form.as_p }}
+                    
+                    <button type="submit" class="btn btn-success mt-3">Зберегти</button>
+                    <a href="{% url 'book_list' %}" class="btn btn-secondary mt-3 ms-2">Скасувати</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
